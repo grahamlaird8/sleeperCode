@@ -16,6 +16,7 @@ def apiCall():
         # print(json.dumps(result, indent=4, sort_keys=True))
         for obj in result:
             # print(obj)
+            #my team is roster id 1 according to api
              if obj.get("roster_id") == 1:
                 matchupID = obj.get("matchup_id")
                 # print(matchupID)
@@ -32,16 +33,19 @@ def apiCall():
                         if obj3.get("roster_id") == rosterID and j != i:
                             # print(float(obj3.get("points")))
                             totalScoreOpp += float(obj3.get("points"))
-                # print(totalScoreOpp)
-                avgOppScore = totalScoreOpp / curWeek-1
+                    # print(totalScoreOpp)
+                    # print(curWeek-1)
+                    avgOppScore = totalScoreOpp / (curWeek-1)
+                    # print(avgOppScore)
+                totalScoreOpp = 0
                 # print("Average opp score: " + str(avgOppScore))
-        print("The average score the player I faced in week " + str(i) + " is " + str(avgOppScore) + " and their score vs me was " + str(pointsGameWeek))
+        print("The average score the player I faced in week " + str(i) + " is " + str(avgOppScore) + " (not including vs me) and their score vs me was " + str(pointsGameWeek))
         totalOppScores += avgOppScore
         # print(totalOppScores)
         totalPointsVsMe += pointsGameWeek
         i += 1
         avgOppScore = 0
-        totalScoreOpp = 0
+
         pointsGameWeek = 0
 
 
