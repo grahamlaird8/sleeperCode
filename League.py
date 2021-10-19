@@ -17,6 +17,7 @@ class League:
         self.populateLeagueTeams()
         self.teamStats = None
         self.populateTeamStats()
+        self.populateExpectedWins()
 
     def populateTeams(self):
         teamsData = self.getFullTeamData()
@@ -123,10 +124,32 @@ class League:
 
             self.teamStats[curLeagueTeam.team.teamOwnerName][EXPECTED_WINS] = round(expectedWins/(self.NUM_PLAYERS - 1), 2)
 
-    def printExpectedWins(self):
+    def populateExpectedWins(self):
         for teamOwner in self.teamStats.keys():
             # print(f"{teamOwner}: {self.teamStats[teamOwner][POINTS_FOR]} - {self.teamStats[teamOwner][POINTS_AGAINST]}")
             expWins = self.teamStats[teamOwner][EXPECTED_WINS]
             teamWins = self.teamStats[teamOwner][WINS]
-            winDiff = round(teamWins - expWins, 2)
-            print(f"{teamOwner}: Wins: {teamWins} Exp Wins: {expWins} ({winDiff})")
+            self.teamStats[teamOwner][WIN_DIFF] = round(teamWins - expWins, 2)
+
+    def printStat(self, stat_name):
+        sortedTeamStatsList = self.sortByStat(stat_name)
+        for teamStats in sortedTeamStatsList:
+            print(f"{teamStats[DISPLAY_NAME]}: {stat_name}: {teamStats[STATS][stat_name]}")
+        print()
+
+    def sortByStat(self, stat_name):
+        teamStatsList = self.convertTeamStatsToList()
+        return sorted(teamStatsList, key=lambda teamStats: -teamStats[STATS][stat_name])
+
+    def convertTeamStatsToList(self):
+        return [{DISPLAY_NAME: owner, STATS: self.teamStats[owner]} for owner in self.teamStats.keys()]
+
+
+    def printExpectedWinsGraphic(self):
+        sortedTeamStatsList = self.sortByStat(EXPECTED_WINS)
+        for teamStats in sortedTeamStatsList:
+            teamWins = teamStats[STATS][WINS]
+            expWins = teamStats[STATS][EXPECTED_WINS]
+            winDiff = teamStats[STATS][WIN_DIFF]
+            print(f"{teamStats[DISPLAY_NAME]}: {EXPECTED_WINS}: {expWins} {WINS}: {teamWins} ({winDiff})")
+        print()
