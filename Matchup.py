@@ -12,6 +12,7 @@ class Matchup:
         # print(team1Data[ROSTER_ID])
         self.team1 = league.getTeamByRosterID(team1Data[ROSTER_ID])
         self.team2 = league.getTeamByRosterID(team2Data[ROSTER_ID])
+        self.team1Win = self.team1Score > self.team2Score
         # print(team2Data[ROSTER_ID])
         # print(self.team1)
         # print(self.team2)
