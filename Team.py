@@ -6,7 +6,10 @@ class Team:
         self.userID = teamData[USER_ID]
         self.rosterID = teamData[ROSTER_ID]
         teamMetadata = teamData[METADATA]
-        self.teamName = teamMetadata[TEAM_NAME]
+        # print(teamMetadata)
+        self.teamName = "????"
+        if TEAM_NAME in teamMetadata.keys():
+            self.teamName = teamMetadata[TEAM_NAME]
         self.teamOwnerName = teamData[DISPLAY_NAME]
 
     def __str__(self):
