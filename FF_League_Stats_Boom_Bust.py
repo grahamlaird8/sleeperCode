@@ -29,7 +29,6 @@ scoreDiff = [0] * numTeams
 scoreDiffOpp = [0] * numTeams
 totalAganistAvg = [0] * numTeams
 totalAganistAvg = dict(zip(nameArray,totalAganistAvg))
-
 #Uses the Sleeper API to gets the points every team
 #has scored and then average it out
 for i in range(0, numTeams ):
@@ -85,3 +84,4 @@ for i in range(1, numWeeks + 1):
 #to most points against the average (unluckiest)
 totalAganistAvg = dict(sorted(totalAganistAvg.items(), key=lambda item: item[1]))
 print(totalAganistAvg)
+#test
