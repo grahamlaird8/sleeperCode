@@ -85,3 +85,4 @@ for i in range(1, numWeeks + 1):
 #to most points against the average (unluckiest)
 totalAganistAvg = dict(sorted(totalAganistAvg.items(), key=lambda item: item[1]))
 print(totalAganistAvg)
+#test
