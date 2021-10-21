@@ -13,11 +13,14 @@ class League:
         self.teams = None
         self.leagueTeams = None
         self.populateTeams()
+        # self.deleteDuplicateTeams()
         self.NUM_PLAYERS = round(len(self.teams))
         self.populateLeagueTeams()
         self.teamStats = None
         self.populateTeamStats()
         self.populateExpectedWins()
+        self.userIDToTeam = {}
+        self.populateTeamMaps()
 
     def populateTeams(self):
         teamsData = self.getFullTeamData()
@@ -50,6 +53,17 @@ class League:
         for team in self.teams:
             print(team)
         print()
+
+    def populateTeamMaps(self):
+        for team in self.teams:
+            self.userIDToTeam[team.getUserID()] = team
+
+    def getTeamByOwnerID(self, ownerID):
+        return self.userIDToTeam[ownerID]
+
+    def getStatsForTeam(self, ownerID):
+        teamOwner = self.getTeamByOwnerID(ownerID).getTeamOwnerName()
+        return self.teamStats[teamOwner]
 
     def getMatchupsByWeek(self, week):
         weekMatchupData = requests.get(f"{self.BASE_URL}{MATCHUPS}/{week}").json()
@@ -153,3 +167,12 @@ class League:
             winDiff = teamStats[STATS][WIN_DIFF]
             print(f"{teamStats[DISPLAY_NAME]}: {EXPECTED_WINS}: {expWins} {WINS}: {teamWins} ({winDiff})")
         print()
+
+    def deleteDuplicateTeams(self):
+        rosterIDs = set()
+        newTeams = []
+        for team in self.teams:
+            if team.getRosterID() not in rosterIDs:
+                newTeams.append(team)
+                rosterIDs.add(team.getRosterID())
+        self.teams = newTeams

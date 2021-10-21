@@ -6,6 +6,3 @@ league = League("707439851250753536")
 # league.printMatchupsBetweenWeeks(START_WEEK, MAX_WEEK)
 
 league.printExpectedWinsGraphic()
-
-league.printStat(POINTS_FOR)
-
