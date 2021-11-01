@@ -15,6 +15,8 @@ class League:
         self.populateTeams()
         # self.deleteDuplicateTeams()
         self.NUM_PLAYERS = round(len(self.teams))
+        self.matchups = {}
+        self.populateMatchups()
         self.populateLeagueTeams()
         self.teamStats = None
         self.populateTeamStats()
@@ -65,7 +67,7 @@ class League:
         teamOwner = self.getTeamByOwnerID(ownerID).getTeamOwnerName()
         return self.teamStats[teamOwner]
 
-    def getMatchupsByWeek(self, week):
+    def populateMatchupsByWeek(self, week):
         weekMatchupData = requests.get(f"{self.BASE_URL}{MATCHUPS}/{week}").json()
         matchupIDDict = {}
 
@@ -77,19 +79,20 @@ class League:
             matchupID = item[MATCHUP_ID]
             matchupIDDict[matchupID].append(item)
 
-        return [Matchup(matchupData, self) for matchupData in matchupIDDict.values()]
+        self.matchups[week] = [Matchup(matchupData, self) for matchupData in matchupIDDict.values()]
+
+    def getMatchupsByWeek(self, week):
+        return self.matchups[week]
 
     def getMatchupsBetweenWeeks(self, start, end):
         weekMatchupDict = {}
-        for i in range(start, end + 1):
-            weekMatchupDict[i] = self.getMatchupsByWeek(i)
-        return weekMatchupDict
-
-    def getMatchupsByWeeks(self, weeks):
-        weekMatchupDict = {}
-        for week in weeks:
+        for week in range(start, end + 1):
             weekMatchupDict[week] = self.getMatchupsByWeek(week)
         return weekMatchupDict
+
+    def populateMatchups(self):
+        for week in range(START_WEEK, MAX_WEEK + 1):
+            self.populateMatchupsByWeek(week)
 
     def printMatchupsByWeek(self, week):
         matchups = self.getMatchupsByWeek(week)
